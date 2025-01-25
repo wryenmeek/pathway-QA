@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, InstanceOf
 # To use advanced features with Pathway Scale, get your free license key from
 # https://pathway.com/features and paste it below.
 # To use Pathway Community, comment out the line below.
-pw.set_license_key("demo-license-key-with-telemetry")
+#pw.set_license_key("demo-license-key-with-telemetry")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -23,7 +23,7 @@ load_dotenv()
 class App(BaseModel):
     question_answerer: InstanceOf[SummaryQuestionAnswerer]
     host: str = "0.0.0.0"
-    port: int = 8000
+    port: int = 8080
 
     with_cache: bool = True
     terminate_on_error: bool = False
