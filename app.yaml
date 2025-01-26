@@ -19,21 +19,37 @@ $sources:
      file_name_pattern:
        - "*.pdf"
        - "*.pptx"
+       - "*.txt"
      object_size_limit: null
      with_metadata: true
      refresh_interval: 60
 
-$llm: !pw.xpacks.llm.llms.OpenAIChat
-  model: "gpt-3.5-turbo"
+$llm: !pw.xpacks.llm.llms.LiteLLMChat
+  model: "gemini/gemini-2.0-flash-exp"
+  api_key: ""
   retry_strategy: !pw.udfs.ExponentialBackoffRetryStrategy
-    max_retries: 6
-  cache_strategy: !pw.udfs.DefaultCache
-  temperature: 0
-  capacity: 8
+    max_retries: 6 #Maximum number of retries. As int.
+    initial_delay: 1000 #First delay in milliseconds.
+    backoff_factor: 2 #Factor by which the delay between retries increases exponentially. Set as float.
+    jitter_ms: 300 #Maximum random jitter added to the delay between retries in milliseconds.
+  #cache_strategy: !pw.udfs.DefaultCache
+  api_base: https://generativelanguage.googleapis.com
+  #context_window_fallback_dict – Mapping of fallback models to be used in case of context window error
+  #fallbacks – List of fallback models to be used if the initial call fails
+  #metadata – Additional data to be logged when the call is made.
 
-$embedder: !pw.xpacks.llm.embedders.OpenAIEmbedder
-  model: "text-embedding-ada-002"
-  cache_strategy: !pw.udfs.DefaultCache
+$embedder: !pw.xpacks.llm.embedders.GeminiEmbedder
+  model: "gemini/text-embedding-004"
+  #capacity (int | None) – Maximum number of concurrent operations allowed. Defaults to None, indicating no specific limit.
+  retry_strategy: !pw.udfs.ExponentialBackoffRetryStrategy #(AsyncRetryStrategy | None) – Strategy for handling retries in case of failures. Defaults to None, meaning no retries.
+    max_retries: 6 #Maximum number of retries. As int.
+    initial_delay: 1000 #First delay in milliseconds.
+    backoff_factor: 2 #Factor by which the delay between retries increases exponentially. Set as float.
+    jitter_ms: 300 #Maximum random jitter added to the delay between retries in milliseconds.
+  #cache_strategy (CacheStrategy | None) – Defines the caching mechanism. To enable caching, a valid CacheStrategy should be provided. See Cache strategy for more information. Defaults to None.
+  #model (str | None) – ID of the model to use. Check the Gemini documentation for list of available models. To specify the model in the UDF call, set it to None in the constructor.
+  api_key: "" #(str | None) – API key for Gemini API services. Can be provided in the constructor, in __call__ or by setting GOOGLE_API_KEY environment variable
+  #gemini_kwargs – any other arguments accepted by gemini embedding service. Check the Gemini documentation for list of accepted arguments.
 
 $splitter: !pw.xpacks.llm.splitters.TokenCountSplitter
   max_tokens: 400
@@ -57,7 +73,7 @@ question_answerer: !pw.xpacks.llm.question_answering.BaseRAGQuestionAnswerer
   llm: $llm
   indexer: $document_store
   # You can set the number of documents to be included as the context of the query
-  # search_topk: 6
+  search_topk: 10
 
 # Change host and port by uncommenting these lines
 # host: "0.0.0.0"
