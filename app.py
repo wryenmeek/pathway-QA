@@ -64,6 +64,25 @@ def load_app_config():
         print("Warning: default-service environment variable not set. "
               "Using potentially insecure file path from app.yaml if configured.")
 
+    # Get the secret for Gemini API Key from environment variable
+    gemini_api_secret = os.environ.get("gemini-api-paid")
+
+    if gemini_api_secret:
+        # Update API Key for $llm settings
+        if "$llm" in app_config and "api_key" in app_config["$llm"]:
+            app_config["$llm"]["api_key"] = gemini_api_secret
+        else:
+            print("Warning: $llm or api_key not found in app.yaml to update Gemini API key.")
+
+        # Update API Key for $embedder settings
+        if "$embedder" in app_config and "api_key" in app_config["$embedder"]:
+            app_config["$embedder"]["api_key"] = gemini_api_secret
+        else:
+            print("Warning: $embedder or api_key not found in app.yaml to update Gemini API key.")
+    else:
+        print("Warning: gemini-api-paid environment variable not set. "
+              "Using potentially insecure API key from app.yaml if configured.")
+    
     return app_config
 
 if __name__ == "__main__":
