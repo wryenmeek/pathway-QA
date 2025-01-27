@@ -11,7 +11,7 @@ from pathway.xpacks.llm.question_answering import RAGClient
 load_dotenv()
 
 PATHWAY_HOST = os.environ.get("PATHWAY_HOST", "app")
-PATHWAY_PORT = os.environ.get("PATHWAY_PORT", 8000)
+PATHWAY_PORT = os.environ.get("PATHWAY_PORT", 8080)
 
 st.set_page_config(page_title="Pathway RAG App", page_icon="favicon.ico")
 
