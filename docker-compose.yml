@@ -3,7 +3,7 @@ services:
     build:
       context: .
     ports:
-      - "${PATHWAY_PORT:-8000}:${PATHWAY_PORT:-8000}"
+      - "${PATHWAY_PORT:-8080}:${PATHWAY_PORT:-8080}"
     networks:
       - network
     volumes:
@@ -17,7 +17,7 @@ services:
       - network
     environment:
       PATHWAY_HOST: "app"
-      PATHWAY_PORT: "${PATHWAY_PORT:-8000}"
+      PATHWAY_PORT: "${PATHWAY_PORT:-8080}"
       UI_PORT: 8501
     ports:
       - "8501:8501"
