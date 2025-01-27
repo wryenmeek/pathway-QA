@@ -13,6 +13,7 @@ import yaml
 # https://pathway.com/features and paste it below.
 # To use Pathway Community, comment out the line below.
 #pw.set_license_key("demo-license-key-with-telemetry")
+#asdf
 
 logging.basicConfig(
     level=logging.INFO,
