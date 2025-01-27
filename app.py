@@ -26,7 +26,7 @@ load_dotenv()
 class App(BaseModel):
     question_answerer: InstanceOf[SummaryQuestionAnswerer]
     host: str = "0.0.0.0"
-    port: int = 8080
+    port: int = 8000
 
     with_cache: bool = True
     terminate_on_error: bool = False
