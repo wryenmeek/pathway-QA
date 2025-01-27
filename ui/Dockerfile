@@ -9,6 +9,8 @@ WORKDIR /ui
 COPY requirements.txt .
 RUN pip install -U --no-cache-dir -r requirements.txt
 
+Expose 8501
+
 COPY . .
 
 CMD exec streamlit run ui.py --server.port ${UI_PORT}
